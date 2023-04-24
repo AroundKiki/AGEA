@@ -82,6 +82,7 @@ if __name__ == '__main__':
         print(f'----------Epoch: {epoch+1}/{args.epoch}, Loss: {loss:.4f}----------\r', end='')
         x1, x2 = get_emb(model, data)
         if args.adaptive and (epoch+1)%args.weight_epoch == 0:
+            # data.g1记录了与每个节点有relation相连的集合
             data.edge_weight1, data.edge_weight2 = cal_edge_weight(x1, x2, data.edge1, data.g1, data.edge2, data.g2, args.lam)
         h1 = get_hits_COS(x1, x2, data.eval_set)[0]
         if h1 > best_h1:
