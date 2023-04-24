@@ -30,7 +30,9 @@ class GCN_V2E2V_layer(nn.Module):
     def v2e(self, x_v, edge):
         edge_j, edge_i, _ = edge
         deg = torch.zeros(self.size_e, device=x_v.device)
+        # 下面的操作计算了每一个边的度数
         deg.scatter_add_(0, edge_i, torch.ones(edge_i.size(0), device=x_v.device))
+        #度数的倒数，再以边在edge中的出现顺序排列
         w = deg.pow(-1)[edge_i]
         m = torch.sparse.FloatTensor(edge[[1, 0]], w, (self.size_e, self.size_v))
         x_e = torch.sparse.mm(m, x_v)
